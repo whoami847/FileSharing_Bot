@@ -1,6 +1,7 @@
 from pyrogram import filters
 from bot.config import ADMINS
 from utils.logger import logger
+from handlers.message_handler import get_uptime
 
 async def stats_command(client, message):
     try:
@@ -8,12 +9,12 @@ async def stats_command(client, message):
             await message.reply("⚠️ You are not authorized to use this command!")
             return
 
-        # Get actual stats from database
         stats_text = (
-            "📊 **Bot Statistics**\n\n"
-            f"• Total Users: {await get_user_count()}\n"
-            f"• Total Files Processed: {await get_file_count()}\n"
-            f"• Server Uptime: {get_uptime()}"
+            "📊 <b>Bot Statistics</b>\n\n"
+            f"• Users: {await get_user_count()}\n"
+            f"• Files Processed: {await get_file_count()}\n"
+            f"• Uptime: {get_uptime()}\n"
+            f"• Version: 1.0.0"
         )
         
         await message.reply_text(stats_text)
@@ -22,15 +23,18 @@ async def stats_command(client, message):
         logger.error(f"Stats command failed: {e}")
         await message.reply("❌ Failed to retrieve statistics. Please try again later.")
 
-# Example database functions (implement these in your database module)
 async def get_user_count():
-    # Implement actual database query
-    return 100
+    try:
+        # Replace with actual database call
+        return 100
+    except Exception as e:
+        logger.error(f"User count error: {e}")
+        return "N/A"
 
 async def get_file_count():
-    # Implement actual database query
-    return 50
-
-def get_uptime():
-    # Implement actual uptime calculation
-    return "2h 15m"
+    try:
+        # Replace with actual database call
+        return 50
+    except Exception as e:
+        logger.error(f"File count error: {e}")
+        return "N/A"
