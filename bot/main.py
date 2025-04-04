@@ -1,4 +1,5 @@
-from pyrogram import Client
+from pyrogram import Client, filters
+from pyrogram.handlers import MessageHandler  # This import was missing
 from bot.config import API_ID, API_HASH, BOT_TOKEN, ADMINS
 from handlers.message_handler import start, handle_video
 from handlers.admin.stats import stats_command
@@ -13,7 +14,7 @@ app = Client(
 )
 
 # Register handlers
-app.add_handler(MessageHandler(start, filters.command("start")))
+app.add_handler(MessageHandler(start, filters.command("start")))  # Fixed extra parenthesis
 app.add_handler(MessageHandler(handle_video, filters.video))
 app.add_handler(MessageHandler(stats_command, filters.command("stats") & filters.user(ADMINS)))
 
