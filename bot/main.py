@@ -1,23 +1,21 @@
 from pyrogram import Client, filters
-from pyrogram.handlers import MessageHandler  # This import was missing
+from pyrogram.handlers import MessageHandler
 from bot.config import API_ID, API_HASH, BOT_TOKEN, ADMINS
-from handlers.message_handler import start, handle_video
-from handlers.admin.stats import stats_command
 
 app = Client(
     "FileSharingBot",
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=BOT_TOKEN,
-    in_memory=True,
-    plugins=dict(root="handlers")
+    in_memory=True,  # ✅ সেশন মেমরিতে স্টোর হবে
+    workers=2,  # ✅ কানেকশন স্ট্যাবিলিটি জন্য
+    sleep_threshold=30  # ✅ টাইমআউট এড়াতে
 )
 
-# Register handlers
-app.add_handler(MessageHandler(start, filters.command("start")))  # Fixed extra parenthesis
+# হ্যান্ডলার যোগ করুন
+app.add_handler(MessageHandler(start, filters.command("start")))
 app.add_handler(MessageHandler(handle_video, filters.video))
-app.add_handler(MessageHandler(stats_command, filters.command("stats") & filters.user(ADMINS)))
 
 if __name__ == "__main__":
-    print("🤖 Bot starting...")
+    print("🤖 বট স্টার্ট হয়েছে!")
     app.run()
